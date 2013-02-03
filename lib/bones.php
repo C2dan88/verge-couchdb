@@ -3,6 +3,13 @@
 define('BASE_URI', str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']));
 define('ROOT', dirname(__DIR__ ));
 
+require_once ROOT . '/lib/sag/src/Sag.php';
+
+function __autoload($classname)
+{
+	include_once ROOT . '/classes/' . strtolower($classname) . '.php';
+}
+
 function get($route, $callback)
 {
 	Bones::register($route, $callback, 'GET');
@@ -33,12 +40,16 @@ class Bones
 	public $vars = array();
 	public $route_segments = array();
 	public $route_variables = array();
+	public $couch;
 
 	public function __construct()
 	{
 		$this->route = $this->get_route();
 		$this->route_segments = explode('/', trim($this->route, '/'));
 		$this->method = $this->get_method();
+
+		$this->couch = new Sag('127.0.0.1', '5984');
+		$this->couch->setDatabase('verge');
 	}
 
 	public static function get_instance()
