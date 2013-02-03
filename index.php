@@ -8,11 +8,20 @@ get('/', function($app) {
 });
 
 get('/signup', function($app) {
-	$app->render('Signup');
+	$app->render('signup');
+});
+
+post('/signup', function($app) {
+	$app->set('message', 'Thanks for Signin Up ' . $app->form('name') . '!');
+	$app->render('home');
 });
 
 echo '<hr /><pre>' . print_r([
-								'QUERY_STRING' => $_SERVER['QUERY_STRING'],
-								'REQUEST_URI' => $_SERVER['REQUEST_URI'],
-							 ]
-							 , true) . '</pre>';
+	'QUERY_STRING' => $_SERVER['QUERY_STRING'],
+	'REQUEST_URI' => $_SERVER['REQUEST_URI'],
+	'POST' => $_POST,
+	'GET' => $_GET,
+	//[$_SERVER],
+	]
+	, true) . 
+'</pre>';
