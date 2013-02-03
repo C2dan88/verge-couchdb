@@ -16,6 +16,11 @@ post('/signup', function($app) {
 	$app->render('home');
 });
 
+get('/say/:message', function($app) {
+	$app->set('message', $app->request('message'));
+	$app->render('home');
+});
+
 echo '<hr /><pre>' . print_r([
 	'QUERY_STRING' => $_SERVER['QUERY_STRING'],
 	'REQUEST_URI' => $_SERVER['REQUEST_URI'],
