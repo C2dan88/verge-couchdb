@@ -40,6 +40,10 @@ class User extends Base
 				$bones->render('user/signup');
 				exit;
 			}
+			else
+			{
+				$bones->error500($e);
+			}
 		}
 	}
 
@@ -75,6 +79,10 @@ class User extends Base
 				$bones->render('user/login');
 				exit;
 			}
+			else
+			{
+				$bones->error500($e);
+			}
 		}
 	}
 
@@ -109,12 +117,23 @@ class User extends Base
 		$bones->couch->setDatabase('_users');
 
 		$user = new User();
-		$document = $bones->couch->get('org.couchdb.user:' . $username)->body;
-		$user->_id       =  $document->_id;
-		$user->name      =  $document->name;
-		$user->email     =  $document->email;
-		$user->full_name =  $document->full_name;
 
-		return $user;
+		try
+		{
+			$document = $bones->couch->get('org.couchdb.user:' . $username)->body;
+			$user->_id       =  $document->_id;
+			$user->name      =  $document->name;
+			$user->email     =  $document->email;
+			$user->full_name =  $document->full_name;
+
+			return $user;
+		}
+		catch(SagCouchException $e)
+		{
+			if($e->getCode() == '404')
+				$bones->error404();
+			else
+				$bones->error500($e);
+		}
 	}
 }

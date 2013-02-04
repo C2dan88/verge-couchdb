@@ -26,6 +26,7 @@
 					<ul class="nav">
 						<li><a href="<?php echo $this->make_route('/') ?>">Home</a></li>
 					<?php if(User::is_authenticated()): ?>
+						<li><a href="<?php echo $this->make_route('/user/' . User::current_user()) ?>">Profile</a></li>
 						<li><a href="<?php echo $this->make_route('/logout') ?>">Logout</a></li>
 					<?php else: ?>
 						<li><a href="<?php echo $this->make_route('/signup') ?>">Signup</a></li>
