@@ -33,10 +33,7 @@ get('/say/:message', function($app) {
 
 post('/login', function($app) {
 
-	$user           = new User();
-
-	printf('<pre>[%s, %s]</pre>', $app->form('username'), $app->form('password'));
-
+	$user = new User();
 	$user->name = $app->form('username');
 	$user->login($app->form('password'));
 
@@ -51,6 +48,11 @@ get('/login', function($app) {
 get('/logout', function($app) {
 	User::logout();
 	$app->redirect('/');
+});
+
+get('/user/:username', function($app) {
+	$app->set('user', User::get_by_username($app->request('username')));
+	$app->render('user/profile');
 });
 
 /*echo '<hr /><pre>' . print_r([

@@ -101,4 +101,20 @@ class User extends Base
 
 		return false;
 	}
+
+	public static function get_by_username($username = null)
+	{
+		$bones = new Bones();
+		$bones->couch->login(ADMIN_USER, ADMIN_PASSWORD);
+		$bones->couch->setDatabase('_users');
+
+		$user = new User();
+		$document = $bones->couch->get('org.couchdb.user:' . $username)->body;
+		$user->_id       =  $document->_id;
+		$user->name      =  $document->name;
+		$user->email     =  $document->email;
+		$user->full_name =  $document->full_name;
+
+		return $user;
+	}
 }
