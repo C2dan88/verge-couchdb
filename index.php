@@ -2,26 +2,27 @@
 
 include 'lib/bones.php';
 
+define('ADMIN_USER', 'admin');
+define('ADMIN_PASSWORD', 'pass');
+
 get('/', function($app) {
 	$app->set('message', 'Welcome Back!');
 	$app->render('home');
 });
 
 get('/signup', function($app) {
-	$app->render('signup');
+	$app->render('user/signup');
 });
 
 post('/signup', function($app) {
-	
-	$user = new User();
-	$user->name  = $app->form('name');
-	$user->email = $app->form('email');
 
-	// Add an entry to our verge couchDB with Sag
-	$app->couch->post($user->to_json());
+	$user               = new User();
+	$user->full_name    = $app->form('full_name');
+	$user->email        = $app->form('email');
+	$user->signup($app->form('username'), $app->form('password'));
 
+	$app->set('success', 'Thanks for Signing Up ' . $user->full_name . '!');
 
-	$app->set('message', 'Thanks for Signin Up ' . $app->form('name') . '!');
 	$app->render('home');
 });
 
@@ -30,7 +31,29 @@ get('/say/:message', function($app) {
 	$app->render('home');
 });
 
-echo '<hr /><pre>' . print_r([
+post('/login', function($app) {
+
+	$user           = new User();
+
+	printf('<pre>[%s, %s]</pre>', $app->form('username'), $app->form('password'));
+
+	$user->name = $app->form('username');
+	$user->login($app->form('password'));
+
+	$app->set('success', 'You are now logged in!');
+	$app->render('home');
+});
+
+get('/login', function($app) {
+	$app->render('user/login');
+});
+
+get('/logout', function($app) {
+	User::logout();
+	$app->redirect('/');
+});
+
+/*echo '<hr /><pre>' . print_r([
 	'QUERY_STRING' => $_SERVER['QUERY_STRING'],
 	'REQUEST_URI' => $_SERVER['REQUEST_URI'],
 	'POST' => $_POST,
@@ -38,4 +61,4 @@ echo '<hr /><pre>' . print_r([
 	//[$_SERVER],
 	]
 	, true) . 
-'</pre>';
+'</pre>';*/

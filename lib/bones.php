@@ -3,6 +3,7 @@
 define('BASE_URI', str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']));
 define('ROOT', dirname(__DIR__ ));
 
+require_once ROOT . '/lib/bootstrap.php';
 require_once ROOT . '/lib/sag/src/Sag.php';
 
 function __autoload($classname)
@@ -155,7 +156,7 @@ class Bones
 
 		if(!$layout)
 		{
-			include $this->conrent;
+			include $this->content;
 		}
 		else
 		{
@@ -176,5 +177,19 @@ class Bones
 		}*/
 
 		return BASE_URI . $path;
+	}
+
+	public function display_alert($variable = 'error')
+	{
+		if(isset($this->vars[$variable]))
+		{
+			return '<div class="alert alert-' . $variable . '"><a class="close" data-dismiss="alert">x</a>' . 
+					$this->vars[$variable] . '</div>';
+		}
+	}
+
+	public function redirect($path = '/')
+	{
+		header('Location: ' . $this->make_route($path));
 	}
 }
