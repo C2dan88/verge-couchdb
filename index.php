@@ -6,7 +6,7 @@ define('ADMIN_USER', 'admin');
 define('ADMIN_PASSWORD', 'pass');
 
 get('/', function($app) {
-	$app->set('message', 'Welcome Back!');
+	$app->set('message', 'Welcome Back!!');
 	$app->render('home');
 });
 

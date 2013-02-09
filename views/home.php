@@ -4,3 +4,4 @@
 		<p>
 			<a href="<?php echo $this->make_route('/signup') ?>" class="btn btn-primary btn-large">Signup Now!</a>
 		</p>
+	</div>
